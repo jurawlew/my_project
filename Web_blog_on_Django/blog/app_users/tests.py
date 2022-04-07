@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 
+from django.core.mail import outbox
+
 from .models import Profile
 
 
@@ -53,7 +55,6 @@ class UserTest(TestCase):
         user = User.objects.create(username=TEST_USERNAME, email=USER_EMAIL)
         response = self.client.post(reverse('app_users:restore_password'), {'email': USER_EMAIL})
         self.assertEqual(response.status_code, 200)
-        from django.core.mail import outbox
         self.assertEqual(len(outbox), 1)
         self.assertIn(USER_EMAIL, outbox[0].to)
 
